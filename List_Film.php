@@ -9,6 +9,10 @@ foreach ($top as $key => $value) {
 	if ($value["im:name"]["label"] === "Gravity") {
 		$classement = array_search($value, $top);
 	}
+	// Realisateur "The LEGO Movie"
+	if ($value["im:name"]["label"] === "The LEGO Movie") {
+		$real = $value["im:artist"]["label"];
+	}
 }
 ?>
 <!DOCTYPE html>
@@ -39,6 +43,7 @@ foreach ($top as $key => $value) {
 <!-- exercice 3 -->
 	<div>
 		<h3>Quel est le réalisateur du film « The LEGO Movie » ?</h3>
+		<span>le/les Réalisateur de The LEGO Movie sont <?= $real;?></span>
 	</div>
 </body>
 </html>

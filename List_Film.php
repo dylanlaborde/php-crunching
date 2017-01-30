@@ -4,8 +4,11 @@ $string = file_get_contents("films.json", FILE_USE_INCLUDE_PATH);
 $brut = json_decode($string, true);
 $top = $brut["feed"]["entry"]; # liste de films
 $filmBefore2000;
+$arrayCategory=[];
+$popularCategory;
+
 foreach ($top as $key => $value) {	
-$category = $value["category"]["attributes"]["label"];
+	$category = $value["category"]["attributes"]["label"];
 	// Classement "Gravity"
 	if ($value["im:name"]["label"] === "Gravity") {
 		$classement = array_search($value, $top);
@@ -18,12 +21,18 @@ $category = $value["category"]["attributes"]["label"];
 	if ($value['im:releaseDate']['label'] < 2000) {
 		$filmBefore2000 = count($value);
 	}
-	
-	 // echo "<li>".$category."</li>";
+	// encapsulation des catégory dans un array
+	array_push($arrayCategory, $category);
 	
 }
+// categorie
+foreach ($arrayCategory as $key => $value) {
+	$maxKeyArray = max(array_count_values($arrayCategory));// valeur max nbr categorie
+	if ($key === $maxKeyArray) {
+		$popularCategory = $value;
+	}
+}	 
 
-// print_r($filmBefore2000);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -75,6 +84,11 @@ $category = $value["category"]["attributes"]["label"];
 		</li>
 		<li><?php echo "le film le plus vieux est". reset($arrayDate); ?></li>
 
+	</div>
+	<!-- exercice 5 -->
+	<div>
+		<h3>Quelle est la catégorie de films la plus représentée ?</h3>
+		<span>la categorie la plus représentée est <?= $popularCategory?></span>
 	</div>
 </body>
 </html>

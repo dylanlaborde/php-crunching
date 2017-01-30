@@ -3,14 +3,9 @@
 $string = file_get_contents("films.json", FILE_USE_INCLUDE_PATH);
 $brut = json_decode($string, true);
 $top = $brut["feed"]["entry"]; # liste de films
-$filmBefore2000=[];
-foreach ($top as $key => $value) {
-	if ($value['im:releaseDate']['label'] < 2000) {
-		array_push($filmBefore2000, $value);
-
-	// print_r($value['im:releaseDate']["attributes"]["label"]);
-
-	}
+$filmBefore2000;
+foreach ($top as $key => $value) {	
+$category = $value["category"]["attributes"]["label"];
 	// Classement "Gravity"
 	if ($value["im:name"]["label"] === "Gravity") {
 		$classement = array_search($value, $top);
@@ -19,8 +14,16 @@ foreach ($top as $key => $value) {
 	if ($value["im:name"]["label"] === "The LEGO Movie") {
 		$real = $value["im:artist"]["label"];
 	}
+	// film avant 2000
+	if ($value['im:releaseDate']['label'] < 2000) {
+		$filmBefore2000 = count($value);
+	}
+	
+	 // echo "<li>".$category."</li>";
+	
 }
 
+// print_r($filmBefore2000);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,7 +58,23 @@ foreach ($top as $key => $value) {
 	<!-- exercice 4 -->
 	<div>
 		<h3>Combien de films sont sortis avant 2000 ?</h3>
-		<span><?= count($filmBefore2000)+1?> Film sont sortit avant 2000</span>
+		<span><?= $filmBefore2000?> Film sont sortit avant 2000</span>
+	</div>
+	<div>
+		<h3>Quel est le film le plus récent ? Le plus vieux ?</h3>
+		<li><?php foreach ($top as $key => $value) :?>
+			<?php 
+			$titre = $value['im:name']['label'];
+			$date = $value["im:releaseDate"]["label"];
+			$arrayDate[$date] = $titre;
+			endforeach;
+			ksort($arrayDate);
+			echo "le film le récent est ". end($arrayDate) ;
+			?>
+
+		</li>
+		<li><?php echo "le film le plus vieux est". reset($arrayDate); ?></li>
+
 	</div>
 </body>
 </html>

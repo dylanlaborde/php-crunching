@@ -5,10 +5,18 @@ $brut = json_decode($string, true);
 $top = $brut["feed"]["entry"]; # liste de films
 $filmBefore2000;
 $arrayCategory=[];
+$arrayArtist=[];
 $popularCategory;
+$popularReal;
 
 foreach ($top as $key => $value) {	
 	$category = $value["category"]["attributes"]["label"];
+	$artist = $value["im:artist"]["label"];
+	// push des catégory dans un array
+	array_push($arrayCategory, $category);
+	//push des realisateur dans un array
+	array_push($arrayArtist, $artist);
+
 	// Classement "Gravity"
 	if ($value["im:name"]["label"] === "Gravity") {
 		$classement = array_search($value, $top);
@@ -21,9 +29,9 @@ foreach ($top as $key => $value) {
 	if ($value['im:releaseDate']['label'] < 2000) {
 		$filmBefore2000 = count($value);
 	}
-	// encapsulation des catégory dans un array
-	array_push($arrayCategory, $category);
 	
+
+
 }
 // categorie
 foreach ($arrayCategory as $key => $value) {
@@ -31,7 +39,14 @@ foreach ($arrayCategory as $key => $value) {
 	if ($key === $maxKeyArray) {
 		$popularCategory = $value;
 	}
-}	 
+}
+//artist
+foreach ($arrayArtist as $key => $value) {
+	 	$maxKeyArtist = max(array_count_values($arrayArtist));
+	 	if ($key === $maxKeyArtist) {
+	 		$popularReal = $value;
+	 	}
+	 }	 
 
 ?>
 <!DOCTYPE html>
@@ -89,6 +104,15 @@ foreach ($arrayCategory as $key => $value) {
 	<div>
 		<h3>Quelle est la catégorie de films la plus représentée ?</h3>
 		<span>la categorie la plus représentée est <?= $popularCategory?></span>
+	</div>
+	<!-- exercice 6 -->
+	<div>
+		<h3>Quel est le réalisateur le plus présent dans le top100 ?</h3>
+		<span>le realisateur le plus present est <?= $popularReal?></span>
+	</div>
+	<div>
+		<h3>Combien cela coûterait-il d'acheter le top10 sur iTunes ? de le louer ?</h3>
+		<span></span>
 	</div>
 </body>
 </html>
